@@ -7,7 +7,8 @@
       }
 
       .cls-2 {
-        fill: #fbb03b;
+        <!-- fill: #fbb03b; -->
+        fill: var(current_Lantern_Color);
       }
     </style>
   </defs>

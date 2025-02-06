@@ -1,3 +1,9 @@
+:root{
+    --lantern_color_off:#fbb03b;
+    --lantern_color_on:#4287f5;
+    --current_Lantern_Color:var(--lantern_color_on);
+}
+
 body {
     background-color: rgb(31, 45, 58);
     margin: 0;
@@ -12,11 +18,49 @@ h1, h2, h3, h4, h5, h6 ,p {
     color: aliceblue;
 }
 
-img{
+svg {
     display: flex;
     max-width: 30vw;
+    /* display: none; */
 }
+
+/* this calls the colored part inside of the lantern */
+.cls-2 {
+    /* fill: #009443; */
+    fill: var(--current_Lantern_Color);
+}
+svg:hover {
+    /* fill: #009443; */
+    --current_Lantern_Color: var(--lantern_color_off);
+}
+
+
+
+
 
 #flashlight {
     display: none;
+    position: absolute;
+    /* max-width: 50vw; */
+    /* position:relative;  */
+    /* mask: #topLayer ; */
+    /* mask-composite:exclude; */
+}
+
+#topLayer{
+    /* display:none; */
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.531);
+    height: 100vh;
+    width: 100vw;
+
+
+    mask-image: url(/assets/flashlight.svg);
+    mask-repeat: no-repeat;
+    mask-size: 40%;
+    mask-composite:revert-layer;
+    /* follow along flashlight source
+    https://codepen.io/bramus/pen/eBZgPB */
+    mask-position: calc(var(--mouse-x, 0) * 120%) calc(var(--mouse-y, 0) * 120%);
+
 }
