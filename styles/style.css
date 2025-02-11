@@ -1,66 +1,217 @@
-:root{
-    --lantern_color_off:#fbb03b;
-    --lantern_color_on:#4287f5;
-    --current_Lantern_Color:var(--lantern_color_on);
+:root {
+    --lantern_color_1: #f57e42;
+    --lantern_color_2: #fbb13b;
+    --lantern_color_3: #fb4b3b;
+    /* --current_Lantern_Color: var(--lantern_color_on); */
+    /* nice orange:  #fbb03b, nice blue #4287f5*/
+    transition: --lantern_color_1 1s, --lantern_color_2 1s;
+
+    /* placement of the light within the light */
+}
+
+@property --lantern_color_1 {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: red;
+}
+
+@property --lantern_color_2 {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: red;
 }
 
 body {
     background-color: rgb(31, 45, 58);
     margin: 0;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     width: 100vw;
     height: 100vh;
-    align-content: center;
-    justify-content: center;
 }
 
-h1, h2, h3, h4, h5, h6 ,p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li {
     color: aliceblue;
 }
 
-svg {
+
+/* ***************** */
+/* section placement */
+/* ***************** */
+
+section {
     display: flex;
+    flex-direction: column;
+    /* background-color: rgba(105, 90, 205, 0.191); */
+    /* border-color: aqua;
+    border-style: solid; */
+
+    align-items: center;
+    justify-items: center;
+
+    max-height: 30vh;
+}
+
+
+
+/* gridding each section */
+section:nth-of-type(1) {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+section:nth-of-type(2) {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+section:nth-of-type(3) {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+/* hiding everything but the center one */
+section:not(:nth-of-type(1)) {
+    display: none;
+}
+
+.active section:not(:nth-of-type(1)) {
+    display: flex;
+}
+
+
+/* ***************** */
+/* lantern placement & colors*/
+/* ***************** */
+
+svg {
     max-width: 30vw;
-    /* display: none; */
+    max-height: 30vh;
 }
 
-/* this calls the colored part inside of the lantern */
-.cls-2 {
-    /* fill: #009443; */
-    fill: var(--current_Lantern_Color);
-}
-svg:hover {
-    /* fill: #009443; */
-    --current_Lantern_Color: var(--lantern_color_off);
+section:nth-of-type(1) svg {
+    max-width: 100%;
 }
 
+section:nth-of-type(1) svg polygon {
+    fill: url(#radial-gradient1);
+}
+
+section:nth-of-type(2) svg polygon {
+    fill: url(#radial-gradient2);
+}
+section:nth-of-type(3) svg polygon {
+    fill: url(#radial-gradient3);
+}
+
+section:has(svg polygon:hover) svg{
+    --lantern_color_1: #e58863;
+    --lantern_color_2: #a30f0f;
+    --lantern_color_3: #f0721e;
+}
 
 
 
+
+svg path {
+    /* so it doesnt read the black part over the polygon */
+    pointer-events: none;
+}
+
+/* test of moving the gradient source */
+/* https://stackoverflow.com/questions/77964712/svg-gradient-offset-animation */
+@keyframes pulseLight {
+    0%,
+    100% {
+        /* stop-color: red; */
+        offset: 0%;
+    }
+
+    50% {
+        stop-color: var(--lantern_color_3);
+        offset: 100%;
+    }
+}
+
+.stop1 {
+    animation: pulseLight 4s linear infinite;
+}
+
+
+
+
+
+
+/* ***************** */
+/* flashlight mess */
+/* ***************** */
 
 #flashlight {
-    display: none;
+    /* display: none; */
     position: absolute;
     /* max-width: 50vw; */
     /* position:relative;  */
     /* mask: #topLayer ; */
     /* mask-composite:exclude; */
+    /* mask-image: url(); */
+
+    width: 30vw;
+    background: radial-gradient(#ff0000 55%, #9198e500 70%);
+    height: 30vw;
+    border-radius: 50em;
+
+    /* transform: calc(var(--mouse-x, 0) * 100%) calc(var(--mouse-y, 0) * 100%);; */
 }
 
-#topLayer{
-    /* display:none; */
+#topLayer {
+    /* display: none; */
+    pointer-events: none;
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.531);
+    /* background-color: rgba(0, 0, 0, 0.531); */
+    background-color: rgba(120, 111, 98, 0.23);
     height: 100vh;
     width: 100vw;
 
-
     mask-image: url(/assets/flashlight.svg);
+    /* mask-image: url(#flashlight); */
+    /* mask-origin: ; */
     mask-repeat: no-repeat;
     mask-size: 40%;
-    mask-composite:revert-layer;
+    /* mask-composite: revert-layer; */
+    /* mask-composite: intersect; */
+    /* mask-composite: exclude; */
+
     /* follow along flashlight source
     https://codepen.io/bramus/pen/eBZgPB */
-    mask-position: calc(var(--mouse-x, 0) * 120%) calc(var(--mouse-y, 0) * 120%);
+    /* mask-position: calc(var(--mouse-x, 0) * 100%) calc(var(--mouse-y, 0) * 100%); */
+    mask-position: center;
+}
 
+.spotlightAnimation {
+    animation-name: spotlight;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+
+    /* mask-size: 60%; */
+}
+
+
+@keyframes spotlight {
+    from {
+        left: 0%;
+        top: 0%;
+    }
+
+    to {
+        left: 35%;
+        top: -35%;
+    }
 }
