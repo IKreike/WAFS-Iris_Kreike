@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&family=Texturina:ital,opsz,wght@0,12..72,100..900;1,12..72,100..900&display=swap');
+
+
 :root {
     --lantern_color_1: #f57e42;
     --lantern_color_2: #fbb13b;
@@ -8,6 +11,22 @@
 
     /* placement of the light within the light */
 }
+
+/* font reference? */
+/* .rubik-RubikFont {
+    font-family: "Rubik", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.texturina-TexturinaFont {
+    font-family: "Texturina", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+} */
+
 
 @property --lantern_color_1 {
     syntax: "<color>";
@@ -38,8 +57,15 @@ h4,
 h5,
 h6,
 p,
-li {
+li,
+textPath {
     color: aliceblue;
+    fill: aliceblue;
+
+    font-family: "Texturina", serif;
+    /* font-optical-sizing: auto; */
+    font-weight: 300;
+    font-style: normal;
 }
 
 
@@ -50,9 +76,6 @@ li {
 section {
     display: flex;
     flex-direction: column;
-    /* background-color: rgba(105, 90, 205, 0.191); */
-    /* border-color: aqua;
-    border-style: solid; */
 
     align-items: center;
     justify-items: center;
@@ -92,27 +115,31 @@ section:not(:nth-of-type(1)) {
 /* lantern placement & colors*/
 /* ***************** */
 
-svg {
-    max-width: 30vw;
-    max-height: 30vh;
-}
-
-section:nth-of-type(1) svg {
-    max-width: 100%;
+svg:nth-of-type(1) {
+    animation-name: smallSwing;
+    transform: rotate(8deg);
+    animation-duration: 3s;
+    /* animation-timing-function: bounce; */
+    animation-direction: alternate-reverse;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    /* background-color: aquamarine; */
 }
 
 section:nth-of-type(1) svg polygon {
     fill: url(#radial-gradient1);
+
 }
 
 section:nth-of-type(2) svg polygon {
     fill: url(#radial-gradient2);
 }
+
 section:nth-of-type(3) svg polygon {
     fill: url(#radial-gradient3);
 }
 
-section:has(svg polygon:hover) svg{
+section:has(svg polygon:hover) svg {
     --lantern_color_1: #e58863;
     --lantern_color_2: #a30f0f;
     --lantern_color_3: #f0721e;
@@ -146,6 +173,59 @@ svg path {
 }
 
 
+/* ***************** */
+/* Title styling */
+/* ***************** */
+/* rounded svg from: https://css-tricks.com/snippets/svg/curved-text-along-path/ */
+
+svg:nth-of-type(2) {
+    /* background-color:rgb(115, 205, 92); */
+    fill: transparent;
+
+    position: absolute;
+    width: 30vw;
+    height: 30vw;
+    transform: translateY(-20%);
+    /* width: fit-content; */
+    /* max-width: 1fr; */
+    pointer-events: none;
+}
+
+textPath {
+    font-size: 3.4em;
+}
+
+
+/* ***************** */
+/* List items */
+/* ***************** */
+/* need to think of a fun way to do this */
+ul {
+    opacity: 0%;
+    position: absolute;
+    /* position: -50%; */
+    /* background-color: rgb(9, 114, 29); */
+    transform: translateY(25vh);
+    pointer-events: none;
+
+    transition-duration: .5s;
+    transition-timing-function: ease-in-out;
+}
+
+/* dropdown on hover */
+section:has(svg polygon:hover) ul {
+    opacity: 100%;
+    /* background-color: rgb(11, 20, 20); */
+    transform: translateY(30vh);
+}
+
+li {
+    /* list-style-type: none; */
+    margin-bottom: .2em;
+}
+
+
+
 
 
 
@@ -162,17 +242,36 @@ svg path {
     /* mask: #topLayer ; */
     /* mask-composite:exclude; */
     /* mask-image: url(); */
+    /* align-self: center;
+    justify-self: center; */
+    translate: 35vw 35vh;
 
-    width: 30vw;
-    background: radial-gradient(#ff0000 55%, #9198e500 70%);
-    height: 30vw;
-    border-radius: 50em;
 
-    /* transform: calc(var(--mouse-x, 0) * 100%) calc(var(--mouse-y, 0) * 100%);; */
+    width: 40vw;
+    background: radial-gradient(#f196403e 55%, #9198e500 70%);
+    height: 40vw;
+
+    border-radius: 50;
+    
+    transition-duration: 2s;
+    
 }
 
+.active #flashlight{
+    /* translate: 00%; */
+    /* align-self:baseline;
+    justify-self: right; */
+    width: 25vw;
+    height: 25vw;
+
+    translate: 70vw 10vh;
+}
+
+
+
+
 #topLayer {
-    /* display: none; */
+    display: none;
     pointer-events: none;
     position: absolute;
     /* background-color: rgba(0, 0, 0, 0.531); */
@@ -185,9 +284,6 @@ svg path {
     /* mask-origin: ; */
     mask-repeat: no-repeat;
     mask-size: 40%;
-    /* mask-composite: revert-layer; */
-    /* mask-composite: intersect; */
-    /* mask-composite: exclude; */
 
     /* follow along flashlight source
     https://codepen.io/bramus/pen/eBZgPB */
@@ -213,5 +309,17 @@ svg path {
     to {
         left: 35%;
         top: -35%;
+    }
+}
+
+@keyframes smallSwing {
+    from {
+        translate: -10%;
+        rotate: 4deg;
+    }
+
+    to {
+        translate: 10%;
+        rotate: -4deg;
     }
 }

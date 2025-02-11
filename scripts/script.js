@@ -12,22 +12,23 @@ const MyURL = baseURL+endpointMe;
 console.log(MyURL);
 
 getData(MyURL).then(  IrisData => {
-	console.log(IrisData);
+	// console.log(IrisData.data);
+
+	// Zorg dat de zelf ingevulde data makkelijk bereikbaar is
+	let CustomData = JSON.parse(IrisData.data.custom);
+	// console.log(CustomData.LeerDoel1);
 
 	// set variable myName als de naam uit de database 
 	let myName = IrisData.data.name;
 
-	// selecteer de h1 uit het document
-	// let deH1 = document.querySelector("H1");
-
-	// vervang de tekst in de h1 door de tekst in de variable myName
-	// deH1.textContent = myName;
-
-
-	// let MyDate = IrisData.data.birthdate;
-	// let Bio = document.querySelector("time");
-	// Bio.textContent = MyDate;
-	// console.log(myName);
+	let Goal1 = document.querySelector("#goal1");
+	Goal1.textContent = CustomData.Leerdoel1;
+	let Goal2 = document.querySelector("#goal2");
+	Goal2.textContent = CustomData.Leerdoel2;
+	let Goal3 = document.querySelector("#goal3");
+	Goal3.textContent = CustomData.Leerdoel3;
+	let Goal4 = document.querySelector("#goal4");
+	Goal4.textContent = CustomData.Leerdoel4;
 }  );
 
 async /*9*/ function getData(URL) {
