@@ -2,15 +2,17 @@
 
 
 :root {
-    --lantern_color_1: #f57e42;
-    --lantern_color_2: #fbb13b;
-    --lantern_color_3: #fb4b3b;
-    /* --current_Lantern_Color: var(--lantern_color_on); */
+    --lantern_color_1: #e58863;
+    --lantern_color_2: #a30f0f;
+    --lantern_color_3: #f0721e;
     /* nice orange:  #fbb03b, nice blue #4287f5*/
     transition: --lantern_color_1 1s, --lantern_color_2 1s;
 
-    /* placement of the light within the light */
+    --backround-color :rgb(31, 45, 58);
+    --flashlightSize: 40vw;
 }
+
+/* darkmode? / lightmode */
 
 /* font reference? */
 /* .rubik-RubikFont {
@@ -27,8 +29,8 @@
     font-style: normal;
 } */
 
-
-@property --lantern_color_1 {
+/*  credit naar de leraar but it dont work anymore anyways so...*/
+/* @property --lantern_color_1 {
     syntax: "<color>";
     inherits: true;
     initial-value: red;
@@ -38,16 +40,18 @@
     syntax: "<color>";
     inherits: true;
     initial-value: red;
-}
+} */
 
 body {
-    background-color: rgb(31, 45, 58);
+    background-color: var(--backround-color);
     margin: 0;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     width: 100vw;
     height: 100vh;
+
+    transition-duration: 5s;
 }
 
 h1,
@@ -72,7 +76,6 @@ textPath {
 /* ***************** */
 /* section placement */
 /* ***************** */
-
 section {
     display: flex;
     flex-direction: column;
@@ -83,30 +86,45 @@ section {
     max-height: 30vh;
 }
 
+label:not(:nth-of-type(1)) {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-items: center;
+
+    max-height: 30vh;
+}
 
 
 /* gridding each section */
-section:nth-of-type(1) {
+label:nth-of-type(1) {
     grid-column: 2;
     grid-row: 2;
 }
 
-section:nth-of-type(2) {
+label:nth-of-type(2) {
     grid-column: 1;
     grid-row: 1;
+    /* background-color: aqua; */
 }
 
-section:nth-of-type(3) {
+label:nth-of-type(3) {
     grid-column: 3;
     grid-row: 1;
 }
 
+label:nth-of-type(4) {
+    grid-column: 2;
+    grid-row: 3;
+}
+
 /* hiding everything but the center one */
-section:not(:nth-of-type(1)) {
+label:not(:nth-of-type(1)) {
     display: none;
 }
 
-.active section:not(:nth-of-type(1)) {
+.active label:not(:nth-of-type(1)) {
     display: flex;
 }
 
@@ -114,7 +132,6 @@ section:not(:nth-of-type(1)) {
 /* ***************** */
 /* lantern placement & colors*/
 /* ***************** */
-
 svg:nth-of-type(1) {
     animation-name: smallSwing;
     transform: rotate(8deg);
@@ -126,27 +143,67 @@ svg:nth-of-type(1) {
     /* background-color: aquamarine; */
 }
 
-section:nth-of-type(1) svg polygon {
-    fill: url(#radial-gradient1);
-
+.bigSwing label:not(:nth-of-type(1)) svg:nth-of-type(1) {
+    animation-name: bigSwing;
+    animation-duration: 5s;
+    animation-direction:normal;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
+    /* background-color: hotpink; */
 }
 
-section:nth-of-type(2) svg polygon {
+
+
+/* zorgt dat de 2e lantaarn ansync is met de eerste */
+label:nth-of-type(2) svg {
+    animation-delay: -1.2s;
+}
+
+label:nth-of-type(4) svg {
+    animation-delay: -.2s;
+}
+
+label:nth-of-type(1) svg polygon {
+    fill: url(#radial-gradient1);
+}
+
+label:nth-of-type(2) svg polygon {
     fill: url(#radial-gradient2);
 }
 
-section:nth-of-type(3) svg polygon {
+label:nth-of-type(3) svg polygon {
     fill: url(#radial-gradient3);
 }
 
-section:has(svg polygon:hover) svg {
-    --lantern_color_1: #e58863;
-    --lantern_color_2: #a30f0f;
-    --lantern_color_3: #f0721e;
+label:nth-of-type(4) svg polygon {
+    fill: url(#radial-gradient4);
 }
 
+/* svg {
+    transition-duration: 2s;
+} */
 
+/* hoe moet dit en de textanimatie op mobile */
+section:has(svg polygon:hover) svg {
+    --lantern_color_1: #f57e42;
+    --lantern_color_2: #fbb13b;
+    --lantern_color_3: #fb4b3b;
+}
 
+/* source idea checkbox: https://stackoverflow.com/questions/13630229/can-i-have-an-onclick-effect-in-css */
+#Lantern1Toggle:checked+label,
+#Lantern2Toggle:checked+label,
+#Lantern3Toggle:checked+label,
+#Lantern4Toggle:checked+label
+ {
+    --lantern_color_1: #f57e42;
+    --lantern_color_2: #fbb13b;
+    --lantern_color_3: #fb4b3b;
+}
+
+input {
+    display: none;
+}
 
 svg path {
     /* so it doesnt read the black part over the polygon */
@@ -156,6 +213,7 @@ svg path {
 /* test of moving the gradient source */
 /* https://stackoverflow.com/questions/77964712/svg-gradient-offset-animation */
 @keyframes pulseLight {
+
     0%,
     100% {
         /* stop-color: red; */
@@ -205,7 +263,7 @@ ul {
     position: absolute;
     /* position: -50%; */
     /* background-color: rgb(9, 114, 29); */
-    transform: translateY(25vh);
+    transform: translateY(25vh) translateX(0vw);
     pointer-events: none;
 
     transition-duration: .5s;
@@ -219,77 +277,85 @@ section:has(svg polygon:hover) ul {
     transform: translateY(30vh);
 }
 
+label:nth-of-type(4) section:has(svg polygon:hover) ul {
+    opacity: 100%;
+    transform: translateY(0) translateX(30vw);
+}
+
+#Lantern2Toggle:checked+label ul,
+#Lantern3Toggle:checked+label ul {
+    opacity: 100%;
+    transform: translateY(30vh);
+}
+
+#Lantern4Toggle:checked+label ul {
+    opacity: 100%;
+    transform: translateY(0) translateX(30vw);
+}
+
+ul {
+    margin: 1em;
+}
+
 li {
-    /* list-style-type: none; */
     margin-bottom: .2em;
 }
 
-
-
-
-
-
-
-/* ***************** */
-/* flashlight mess */
-/* ***************** */
-
-#flashlight {
-    /* display: none; */
-    position: absolute;
-    /* max-width: 50vw; */
-    /* position:relative;  */
-    /* mask: #topLayer ; */
-    /* mask-composite:exclude; */
-    /* mask-image: url(); */
-    /* align-self: center;
-    justify-self: center; */
-    translate: 35vw 35vh;
-
-
-    width: 40vw;
-    background: radial-gradient(#f196403e 55%, #9198e500 70%);
-    height: 40vw;
-
-    border-radius: 50;
-    
-    transition-duration: 2s;
-    
+label:nth-of-type(2) ul, label:nth-of-type(4) ul {
+    list-style-type: none;
 }
 
-.active #flashlight{
-    /* translate: 00%; */
-    /* align-self:baseline;
-    justify-self: right; */
-    width: 25vw;
-    height: 25vw;
+li img {
+    aspect-ratio: 1/1;
+    border-radius: 50em;
+    max-width: calc(var(--flashlightSize)/2);
+    object-fit: cover;
+    margin-bottom: 1em;
+}
 
+
+/* ***************** */
+/* flashlight not a mess anymore */
+/* ***************** */
+
+.flashlight {
+    /* display: none; */
+    position: absolute;
+    translate: 35vw 35vh;
+
+    aspect-ratio: 1/1;
+    width: var(--flashlightSize);
+    max-width: 30vh;
+
+    background: radial-gradient(#f196403e 55%, #9198e500 70%);
+
+    border-radius: 50em;
+
+    transition-duration: 2s;
+}
+
+.active {
+    --flashlightSize: 25vw;
+    --backround-color :rgb(57, 81, 103);
+}
+
+/* de type die hij leest is de div, dus toplayer is 1 */
+.active .flashlight:nth-of-type(2) {
+    translate: 5vw 10vh;
+}
+
+.active .flashlight:nth-of-type(3) {
     translate: 70vw 10vh;
 }
 
-
-
-
-#topLayer {
-    display: none;
-    pointer-events: none;
-    position: absolute;
-    /* background-color: rgba(0, 0, 0, 0.531); */
-    background-color: rgba(120, 111, 98, 0.23);
-    height: 100vh;
-    width: 100vw;
-
-    mask-image: url(/assets/flashlight.svg);
-    /* mask-image: url(#flashlight); */
-    /* mask-origin: ; */
-    mask-repeat: no-repeat;
-    mask-size: 40%;
-
-    /* follow along flashlight source
-    https://codepen.io/bramus/pen/eBZgPB */
-    /* mask-position: calc(var(--mouse-x, 0) * 100%) calc(var(--mouse-y, 0) * 100%); */
-    mask-position: center;
+.active .flashlight:nth-of-type(4) {
+    translate: 35vw 70vh;
 }
+
+
+/* follow along flashlight source
+    https://codepen.io/bramus/pen/eBZgPB */
+/* not currently being used, but might be useful later */
 
 .spotlightAnimation {
     animation-name: spotlight;
@@ -321,5 +387,22 @@ li {
     to {
         translate: 10%;
         rotate: -4deg;
+    }
+}
+
+@keyframes bigSwing {
+    from {
+        rotate: 30deg;
+        transform: translateX(-30em);
+        /* translate: 10% 10% 10%; */
+    }
+    80% {
+        rotate: -10deg;
+        transform: translateX(5em);
+    }
+    to {
+        rotate: 4deg;
+        transform: translateX(0em);
+        /* translate: 0 0 0; */
     }
 }
